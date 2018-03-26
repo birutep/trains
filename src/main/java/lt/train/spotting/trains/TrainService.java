@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +13,15 @@ import lt.train.spotting.vagons.Vagon;
 @Service
 public class TrainService {
 
-	@Autowired
+//	@Autowired
 	TrainRepository trainRep;
-	
+		
+	public TrainService() {}
+
+	public TrainService(TrainRepository trainRep) {
+		this.trainRep = trainRep;
+	}
+
 	@Transactional(readOnly=true)
 	public List<Train> getAllTrains(){
 		return trainRep.findAll();
@@ -53,12 +59,9 @@ public class TrainService {
 		
 	}
 	
-	
 	@Transactional
 	public void deleteTrain(Long id) {
 		trainRep.deleteById(id);
 	}
-	
-	
 	
 }

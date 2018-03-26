@@ -2,16 +2,22 @@ package lt.train.spotting.vagons;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class VagonService {
 
-	@Autowired
+//	@Autowired
 	VagonRepository vagonRep;
 	
+	public VagonService() {}
+	
+	public VagonService(VagonRepository vagonRep) {
+		this.vagonRep = vagonRep;
+	}
+
 	@Transactional(readOnly=true)
 	public List<Vagon> getAllVagons(){
 		return vagonRep.findAll();
