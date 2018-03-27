@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,18 +35,21 @@ public class TrainController {
 	
 	public TrainController() {}
 	
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@RequestMapping(method=RequestMethod.GET, value="/trains")
 	@ApiOperation(value="Get all trains")
 	public @ResponseBody List<Train> getTrains(){
 		return trainServ.getAllTrains();
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@RequestMapping(method=RequestMethod.GET, path= "/trains/{trainId}")
 	@ApiOperation(value="Get train by ID")
 	public @ResponseBody Train findTrainById(@PathVariable Long trainId) {
 		return trainServ.getTrainById(trainId);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST,value="/trains")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value="Create train")
@@ -53,11 +57,13 @@ public class TrainController {
 		trainServ.createTrain(train);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.PUT, value="/trains/{trainId}")
 	public @ResponseBody void updateTrainInfo(@PathVariable Long trainId, @RequestBody Train train) {
 		trainServ.updateTrain(trainId, train);
 	} 	
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(path= "/trains/{trainId}", method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ApiOperation(value="Delete train")
@@ -66,12 +72,14 @@ public class TrainController {
 	}
 	
 	
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@RequestMapping(method=RequestMethod.GET, value="/trains/{trainId}/vagons")
 	@ApiOperation(value="Get all vagons for one particular train")
 	public @ResponseBody List<Vagon> getVagonsForOneTrain(@PathVariable Long trainId){
 		return trainServ.getVagonsFromTrains(trainId);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST, value="/trains/{trainId}/vagons")
 	@ApiOperation(value="Add new vagon for the train")
 	public @ResponseBody void addVagonToTrain(@PathVariable Long trainId, @RequestBody VagonCreate vagon) {

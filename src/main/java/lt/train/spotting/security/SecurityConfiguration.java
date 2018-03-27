@@ -14,6 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import lt.train.spotting.users.UserRepository;
 
 @EnableGlobalMethodSecurity(prePostEnabled=true)
+//@EnableGlobalMethodSecurity(securedEnabled=true,prePostEnabled=true) //sitas yra is ITakademijos
 @EnableWebSecurity
 @EnableJpaRepositories(basePackageClasses = UserRepository.class)
 @Configuration
