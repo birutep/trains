@@ -1,6 +1,6 @@
 #FileLock
-#Mon Mar 26 10:20:48 EEST 2018
+#Tue Mar 27 08:38:41 EEST 2018
 hostName=204K-9
-id=162612e4acbfd5bfb6586776eb3168941a51732cfab
+id=16265f728c2fa870896c2c36e52f0805b984e626fcf
 method=file
-server=192.168.56.1\:2697
+server=192.168.56.1\:1870

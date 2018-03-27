@@ -49,16 +49,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 			//virsuje jis cia pasako, kad jei ateini iki linkucio, kur yra
 			//"trains" url'e, tai tu ten tada padaryk autentikacija. O visi kiti
 			//requestai (zemiau einantys), leisk viska.
+			.antMatchers("/vagons/**").authenticated()
 			.anyRequest().permitAll()
 				.and()
 			.formLogin().permitAll() //sitas nuves tiesiai i Spring logina. Jei noriu i savo: formLogin().loginPage("mano psl url").permitAll();
 				.and()
 			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
-			http.exceptionHandling().accessDeniedPage("/403");
+		
+		http.exceptionHandling().accessDeniedPage("/403");
 		http.csrf().disable();
 		http.headers().frameOptions().disable();
 		
-		//P.S. Neuzmirsk pt nueit i kontroleri ir sudet @PreAuthorize :)
+		//P.S. Neuzmirsk pt nueit i kontroleri ir sudet @PreAuthorize 
 	}
 	
 	
