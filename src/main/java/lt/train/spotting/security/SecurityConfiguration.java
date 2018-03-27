@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -22,6 +23,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	@Autowired
 	private CustomUserDetailsService userDetailsServ;
+	
+	//copy-paste tiesiai is internetinio pvz. Paziuret, kuo ji pakeisti
+	private static String REALM="MY_TEST_REALM";
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
@@ -45,23 +49,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure (HttpSecurity http) throws Exception{
-		http.authorizeRequests()
-			.antMatchers("/trains/**").hasRole("ADMIN") //authenticated()
+		http.csrf().disable()
+			.authorizeRequests()
+				.antMatchers("/trains/**").hasRole("ADMIN") //authenticated()
 			//virsuje jis cia pasako, kad jei ateini iki linkucio, kur yra
 			//"trains" url'e, tai tu ten tada padaryk autentikacija. O visi kiti
 			//requestai (zemiau einantys), leisk viska.
-			.antMatchers("/vagons/**").authenticated()
-			.anyRequest().permitAll()
-				.and()
-			.formLogin().permitAll() //sitas nuves tiesiai i Spring logina. Jei noriu i savo: formLogin().loginPage("mano psl url").permitAll();
-				.and()
-			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+				.antMatchers("/vagons/**").authenticated()
+				.anyRequest().permitAll()
+			.and()
+			.httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
+			.and()
+			. sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		//zemiau einantys buvo paimti is youtube tutorialso, katrie buvo pakeisti above reikalu
+//			formLogin().permitAll() //sitas nuves tiesiai i Spring logina. Jei noriu i savo: formLogin().loginPage("mano psl url").permitAll();
+//				.and()
+//			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
 		
 		http.exceptionHandling().accessDeniedPage("/403");
-		http.csrf().disable();
 		http.headers().frameOptions().disable();
 		
 		//P.S. Neuzmirsk pt nueit i kontroleri ir sudet @PreAuthorize 
+	}
+	
+	public CustomBasicAuthenticationEntryPoint getBasicAuthEntryPoint() {
+		return new CustomBasicAuthenticationEntryPoint();
 	}
 	
 	
