@@ -11,8 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lt.train.spotting.trains.Train;
 
 @Entity
 @Table(name="USERS")
@@ -28,14 +33,20 @@ public class User {
 	
 	@Column (name="PASSWORD")
 	private String password;
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable (
-			name="USER_ROLE", 
-			joinColumns = @JoinColumn(
-					name="ROLE_ID"))
-	private Set<Role> roles; // 1-Admin  2-User
 
+	//Sitas buvo kai as pirmini pavyzdi buvau pasidarius, kur buvo mintis, kad vienas useris gali tureti daug roliu.
+//	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+//	@JoinTable (
+//			name="USER_ROLE", 
+//			joinColumns = @JoinColumn(
+//					name="ROLE_ID"))
+//	private Set<Role> roles; // 1-Admin  2-User
+
+	@ManyToOne
+	@JoinColumn(name="ROLE_ID")
+	@JsonIgnore
+	private Role role; // 1-Admin  2-User
+		
 	public User() {}
 	
 	//kazi koks keistumas - sis konstruktorius reikalingas,
@@ -44,7 +55,7 @@ public class User {
 		this.id = user.getId();
 		this.name = user.getName();
 		this.password = user.getPassword();
-		this.roles = user.getRoles();
+		this.role = user.getRole();
 	}
 
 	public Long getId() {
@@ -71,12 +82,12 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 }
 

@@ -25,6 +25,9 @@ public class UserController {
 	@Autowired
 	UserService userServ;
 	
+	@Autowired
+	RoleService roleServ;
+	
 	public UserController() {}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/users")
@@ -39,11 +42,13 @@ public class UserController {
 		return userServ.getUserById(userId);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST,value="/users")
+	@RequestMapping(method=RequestMethod.POST,value="/users/{roleId}")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value="Create user")
-	public @ResponseBody void addUser(@RequestBody User user) {
-		userServ.addUser(user);
+	//padariau pathvariable,nes su requestbody mete serializable error... Cia gal reikes pataisyti daabr projekta.
+	public @ResponseBody void addUser(@PathVariable Long roleId, @RequestBody User user) {
+		user.setRole(roleServ.getRoleById(roleId));
+		userServ.addUser(roleId, user);
 	}
 		
 	@RequestMapping(path= "/user/{userId}", method=RequestMethod.DELETE)

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,7 @@ public class TrainService {
 		
 	public TrainService() {}
 
-//	public TrainService(TrainRepository trainRep) {
-//		this.trainRep = trainRep;
-//	}
-
+//	@PreAuthorize("hasRole('ADMIN')")
 	@Transactional(readOnly=true)
 	public List<Train> getAllTrains(){
 		return trainRep.findAll();

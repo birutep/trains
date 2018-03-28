@@ -2,6 +2,7 @@ package lt.train.spotting.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -19,6 +20,7 @@ import lt.train.spotting.users.UserRepository;
 @EnableWebSecurity
 @EnableJpaRepositories(basePackageClasses = UserRepository.class)
 @Configuration
+@EnableAspectJAutoProxy
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
 	@Autowired
@@ -51,20 +53,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure (HttpSecurity http) throws Exception{
 		http.csrf().disable()
 			.authorizeRequests()
-				.antMatchers("/trains/**").hasRole("ADMIN") //authenticated()
+				.antMatchers("/", "/swagger-ui.html").permitAll()	
+				.antMatchers("/trains/**").authenticated()//.hasRole("ADMIN")
 			//virsuje jis cia pasako, kad jei ateini iki linkucio, kur yra
 			//"trains" url'e, tai tu ten tada padaryk autentikacija. O visi kiti
-			//requestai (zemiau einantys), leisk viska.
+			//requestai (zemiau einantys), leisk arba kai prisijunges, arba leisk viksa
 				.antMatchers("/vagons/**").authenticated()
 				.anyRequest().permitAll()
 			.and()
 			.httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())
 			.and()
-			. sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			. sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		//zemiau einantys buvo paimti is youtube tutorialso, katrie buvo pakeisti above reikalu
+//			.and()
 //			formLogin().permitAll() //sitas nuves tiesiai i Spring logina. Jei noriu i savo: formLogin().loginPage("mano psl url").permitAll();
-//				.and()
-//			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+			.and()
+			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
 		
 		http.exceptionHandling().accessDeniedPage("/403");
 		http.headers().frameOptions().disable();

@@ -1,5 +1,6 @@
 package lt.train.spotting.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -17,10 +18,12 @@ public class CustomUserDetails extends User implements UserDetails{
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return getRoles()
-			.stream()
-			.map(role -> new SimpleGrantedAuthority("ROLE_"+role.getRole()))
-			.collect(Collectors.toList());
+		
+		Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<SimpleGrantedAuthority>();
+		
+		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_"+super.getRole()));
+		
+		return grantedAuthorities;
 	}
 
 	@Override

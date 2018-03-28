@@ -3,6 +3,7 @@ package lt.train.spotting;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -15,6 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 @EnableJpaRepositories(basePackages="lt.train.spotting")
+//@EnableAspectJAutoProxy(proxyTargetClass=true) //sitas turejo isspresti beda, kad controlleris neleidzia preauthorised. NEpaejo.
 public class SpottingApplication {
 
 	public static void main(String[] args) {

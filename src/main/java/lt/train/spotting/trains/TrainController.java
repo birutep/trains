@@ -35,7 +35,8 @@ public class TrainController {
 	
 	public TrainController() {}
 	
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+//	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(method=RequestMethod.GET, value="/trains")
 	@ApiOperation(value="Get all trains")
 	public @ResponseBody List<Train> getTrains(){
@@ -70,8 +71,7 @@ public class TrainController {
 	public @ResponseBody void deleteTrain(@PathVariable Long trainId) {
 		trainServ.deleteTrain(trainId);
 	}
-	
-	
+		
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@RequestMapping(method=RequestMethod.GET, value="/trains/{trainId}/vagons")
 	@ApiOperation(value="Get all vagons for one particular train")
@@ -79,7 +79,7 @@ public class TrainController {
 		return trainServ.getVagonsFromTrains(trainId);
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST, value="/trains/{trainId}/vagons")
 	@ApiOperation(value="Add new vagon for the train")
 	public @ResponseBody void addVagonToTrain(@PathVariable Long trainId, @RequestBody VagonCreate vagon) {

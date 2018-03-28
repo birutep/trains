@@ -12,6 +12,9 @@ public class UserService {
 	@Autowired
 	UserRepository userRep;
 	
+	@Autowired
+	RoleRepository roleRep;
+	
 	@Transactional(readOnly=true)
 	public List<User> getAllUsers(){
 		return userRep.findAll();
@@ -22,10 +25,20 @@ public class UserService {
 		return userRep.getOne(userID);
 	}
 	
+//	@Transactional
+//	public void addUser(User user) {
+//		userRep.save(user);
+//	}
+	
 	@Transactional
-	public void addUser(User user) {
+	public void addUser(Long roleID, User user) {
+		User userNew = new User();
+		userNew.setName(user.getName());
+		userNew.setPassword(user.getPassword());
 		userRep.save(user);
 	}
+	
+	
 	
 	@Transactional
 	public void deleteUser(Long userID) {
