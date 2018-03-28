@@ -23,7 +23,7 @@ public class Train {
 	@Column (name="ORGANIZATION")
 	private String org;
 	
-	@Column (name="CIRY")
+	@Column (name="CITY")
 	private String city;
 
 	@OneToMany(mappedBy="train", cascade = CascadeType.ALL)

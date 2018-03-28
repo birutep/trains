@@ -54,11 +54,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http.csrf().disable()
 			.authorizeRequests()
 				.antMatchers("/", "/swagger-ui.html").permitAll()	
-				.antMatchers("/trains/**").authenticated()//.hasRole("ADMIN")
-			//virsuje jis cia pasako, kad jei ateini iki linkucio, kur yra
-			//"trains" url'e, tai tu ten tada padaryk autentikacija. O visi kiti
-			//requestai (zemiau einantys), leisk arba kai prisijunges, arba leisk viksa
+				.antMatchers("/trains/**").authenticated()
 				.antMatchers("/vagons/**").authenticated()
+//				.antMatchers("/users/**").hasRole("ADMIN")
 				.anyRequest().permitAll()
 			.and()
 			.httpBasic().realmName(REALM).authenticationEntryPoint(getBasicAuthEntryPoint())

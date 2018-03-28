@@ -35,8 +35,7 @@ public class TrainController {
 	
 	public TrainController() {}
 	
-//	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	@PreAuthorize("hasAuthority('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@RequestMapping(method=RequestMethod.GET, value="/trains")
 	@ApiOperation(value="Get all trains")
 	public @ResponseBody List<Train> getTrains(){
@@ -86,28 +85,6 @@ public class TrainController {
 		vagon.setTrain(trainServ.getTrainById(trainId));
 		vagonServ.createVagon(vagon);
 	}
-	
-	
-//	@RequestMapping(method=RequestMethod.POST, value="/trains/{trainId}/cargo")
-//	@ApiOperation(value="Add new vagon for the train")
-//	public @ResponseBody void addVagonCARGOtoTrain(@PathVariable Long trainId, @RequestBody VagonCargo vagon) {
-//		vagon.setTrain(trainServ.getTrainById(trainId));
-//		vagonServ.createCargoVagon(vagon);
-//	}
-//	
-//	@RequestMapping(method=RequestMethod.POST, value="/trains/{trainId}/passenger")
-//	@ApiOperation(value="Add new vagon for the train")
-//	public @ResponseBody void addVagonPASSENtoTrain(@PathVariable Long trainId, @RequestBody VagonPassenger vagon) {
-//		vagon.setTrain(trainServ.getTrainById(trainId));
-//		vagonServ.createPassVagon(vagon);
-//	}
-//	
-//	@RequestMapping(method=RequestMethod.POST, value="/trains/{trainId}/locomotive")
-//	@ApiOperation(value="Add new vagon for the train")
-//	public @ResponseBody void addVagonLOKOtoTrain(@PathVariable Long trainId, @RequestBody VagonLocomotive vagon) {
-//		vagon.setTrain(trainServ.getTrainById(trainId));
-//		vagonServ.createLokoVagon(vagon);
-//	}
 	
 	
 	

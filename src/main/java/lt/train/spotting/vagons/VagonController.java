@@ -21,12 +21,23 @@ public class VagonController {
 	@Autowired
 	VagonService vagonServ;
 	
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	@RequestMapping(method=RequestMethod.GET, value="/vagons")
 	@ApiOperation(value="Get all vagons")
 	public @ResponseBody List<Vagon> getVagons(){
 		return vagonServ.getAllVagons();
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(path= "/vagons/{vagonId}", method=RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ApiOperation(value="Delete vagon")
+	public @ResponseBody void deleteVagon(@PathVariable Long vagonId) {
+		vagonServ.deleteVagon(vagonId);
+	}
+	
+	//Zemiau einantys vagonai yra sukuriami nepriskiriant ju kokiam nors traukiniui.
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST,value="/vagons/cargo")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value="Create cargo vagon")
@@ -34,6 +45,7 @@ public class VagonController {
 		vagonServ.createCargoVagon(vagon);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST,value="/vagons/pass")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value="Create passenger vagon")
@@ -41,18 +53,12 @@ public class VagonController {
 		vagonServ.createPassVagon(vagon);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST,value="/vagons/loko")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value="Create locomotive vagon")
 	public @ResponseBody void addLocomotiveVagon(@RequestBody VagonLocomotive vagon) {
 		vagonServ.createLokoVagon(vagon);
-	}
-	
-	@RequestMapping(path= "/vagons/{vagonId}", method=RequestMethod.DELETE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@ApiOperation(value="Delete vagon")
-	public @ResponseBody void deleteVagon(@PathVariable Long vagonId) {
-		vagonServ.deleteVagon(vagonId);
 	}
 	
 }

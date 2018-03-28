@@ -26,6 +26,7 @@ public class Role {
 	@Column (name="ROLE_NAME")
 	private String roleName;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="role",cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<User> users; 
 	
